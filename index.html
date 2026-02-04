@@ -8,9 +8,8 @@
     <link rel="stylesheet" href="style.css">
     <script>
 AFRAME.registerComponent('hdri', {
-  schema: {
-    url: { type: 'string' }
-  },
+  schema: { type: 'string' },
+
   init: function () {
     const sceneEl = this.el;
 
@@ -18,29 +17,29 @@ AFRAME.registerComponent('hdri', {
       const renderer = sceneEl.renderer;
       const scene = sceneEl.object3D;
 
-      const rgbeLoader = new THREE.RGBELoader();
-      rgbeLoader.setDataType(THREE.UnsignedByteType);
+      const loader = new THREE.RGBELoader();
+      loader.setDataType(THREE.UnsignedByteType);
 
-      rgbeLoader.load(this.data.url, (texture) => {
-        const pmremGenerator = new THREE.PMREMGenerator(renderer);
-        pmremGenerator.compileEquirectangularShader();
+      loader.load(this.data, (texture) => {
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        pmrem.compileEquirectangularShader();
 
-        const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-        scene.environment = envMap;
+        scene.environment = pmrem.fromEquirectangular(texture).texture;
 
         texture.dispose();
-        pmremGenerator.dispose();
+        pmrem.dispose();
       });
     });
   }
 });
 </script>
 
+
   </head>
   <body>
     <a-scene
         renderer="colorManagement: true; physicallyCorrectLights: true;"
-        hdri="url: ./wasteland_clouds_puresky_4k.hdr">
+        hdri="./wasteland_clouds_puresky_4k.hdr">
         <a-ocean-plane height="100" width="100" position="0 -1 0"></a-ocean-plane>
 
               <!-- Camera with cursor -->
