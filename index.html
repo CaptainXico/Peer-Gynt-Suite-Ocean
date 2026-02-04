@@ -7,31 +7,35 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
     <link rel="stylesheet" href="style.css">
     <script>
-      // Register the 'hdri' component
-      AFRAME.registerComponent('hdri', {
-        schema: {
-          url: {type: 'string'}, // Define the data schema
-        },
-        init: function () {
-          const { url } = this.data; // Get the URL from the component data
-          const sceneEl = this.el; // Reference to the A-Frame scene element
-          const scene = sceneEl.object3D; // THREE.js scene object
-          const renderer = sceneEl.renderer; // A-Frame renderer
-          // Set up the HDRI loader
-          const rgbeLoader = new THREE.RGBELoader();
-          rgbeLoader.setDataType(THREE.UnsignedByteType);
-          rgbeLoader.load(url, (texture) => {
-            // PMREM Generator for converting the texture to a suitable format
-            const pmremGenerator = new THREE.PMREMGenerator(renderer);
-            pmremGenerator.compileEquirectangularShader();
-            const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-            scene.environment = envMap; // Set the scene environment
-            texture.dispose();
-            pmremGenerator.dispose();
-          });
-        }
+AFRAME.registerComponent('hdri', {
+  schema: {
+    url: { type: 'string' }
+  },
+  init: function () {
+    const sceneEl = this.el;
+
+    sceneEl.addEventListener('loaded', () => {
+      const renderer = sceneEl.renderer;
+      const scene = sceneEl.object3D;
+
+      const rgbeLoader = new THREE.RGBELoader();
+      rgbeLoader.setDataType(THREE.UnsignedByteType);
+
+      rgbeLoader.load(this.data.url, (texture) => {
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        pmremGenerator.compileEquirectangularShader();
+
+        const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+        scene.environment = envMap;
+
+        texture.dispose();
+        pmremGenerator.dispose();
       });
-    </script>
+    });
+  }
+});
+</script>
+
 
     
   </head>
@@ -49,7 +53,12 @@
         look-controls
         wasd-controls
       >
-        <a-cursor color="#333" maxdistance="30"></a-cursor>
+        <a-cursor
+          rayOrigin="mouse"
+          color="#333"
+          maxdistance="30">
+        </a-cursor>
+
       </a-entity>
 
       <a-sky rotation="0 180 0" src="https://cdn.glitch.global/c2ccdc8b-d87a-49af-95e6-e3cd029bbd31/2048-polyhaven-wasteland_clouds_puresky.jpeg?v=1699386634988"></a-sky>
@@ -93,7 +102,6 @@
       };
     </script>
     
-     </div>
     <div id="static-content">
       <h2>Point to the cube and click & WASD</h2>
     </div>
