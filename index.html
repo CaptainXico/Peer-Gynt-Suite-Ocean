@@ -14,6 +14,8 @@ AFRAME.registerComponent('hdri', {
     const sceneEl = this.el;
 
     sceneEl.addEventListener('loaded', () => {
+      console.log('HDRI URL =', this.data);
+
       const renderer = sceneEl.renderer;
       const scene = sceneEl.object3D;
 
