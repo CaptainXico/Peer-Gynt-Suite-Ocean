@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.1.0/dist/aframe-extras.min.js"></script>
-    <script src="./combo-ocean.js"></script>
-    <script src="https://unpkg.com/three@0.164.0/examples/js/loaders/EXRLoader.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <script>
+   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.1.0/dist/aframe-extras.min.js"></script>
+
+<script src="https://unpkg.com/three@0.164.0/examples/js/loaders/EXRLoader.js"></script>
+
+<script>
 AFRAME.registerComponent('hdri', {
   schema: { type: 'string' },
 
   init: function () {
+
     const sceneEl = this.el;
 
     sceneEl.addEventListener('loaded', () => {
-      console.log('HDRI URL =', this.data);
+
+      console.log("HDRI URL =", this.data);
 
       const renderer = sceneEl.renderer;
       const scene = sceneEl.object3D;
 
       const loader = new THREE.EXRLoader();
-      loader.setDataType(THREE.UnsignedByteType);
 
       loader.load(this.data, (texture) => {
-        const pmrem = new THREE.PMREMGenerator(renderer);
-        pmrem.compileEquirectangularShader();
 
-        scene.environment = pmrem.fromEquirectangular(texture).texture;
+        const pmrem = new THREE.PMREMGenerator(renderer);
+
+        const envMap = pmrem.fromEquirectangular(texture).texture;
+
+        scene.environment = envMap;
 
         texture.dispose();
         pmrem.dispose();
+
+        console.log("EXR loaded successfully");
+
       });
+
     });
+
   }
 });
 </script>
