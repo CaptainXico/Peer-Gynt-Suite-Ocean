@@ -11,20 +11,20 @@
 AFRAME.registerComponent('hdri', {
   schema: { type: 'string' },
 
-  init: function () {
+  init() {
 
     const sceneEl = this.el;
 
-    sceneEl.addEventListener('loaded', () => {
-
-      console.log("HDRI URL =", this.data);
+    sceneEl.addEventListener('loaded', async () => {
 
       const renderer = sceneEl.renderer;
       const scene = sceneEl.object3D;
 
-      const loader = new THREE.EXRLoader();
+      const loader = new THREE.TextureLoader();
 
       loader.load(this.data, (texture) => {
+
+        texture.mapping = THREE.EquirectangularReflectionMapping;
 
         const pmrem = new THREE.PMREMGenerator(renderer);
 
@@ -35,7 +35,7 @@ AFRAME.registerComponent('hdri', {
         texture.dispose();
         pmrem.dispose();
 
-        console.log("EXR loaded successfully");
+        console.log("Environment loaded");
 
       });
 
