@@ -19,7 +19,7 @@ AFRAME.registerComponent('hdri', {
       const renderer = sceneEl.renderer;
       const scene = sceneEl.object3D;
 
-      const loader = new THREE.RGBELoader();
+      const loader = new THREE.EXRLoader();
       loader.setDataType(THREE.UnsignedByteType);
 
       loader.load(this.data, (texture) => {
