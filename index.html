@@ -4,47 +4,29 @@
   <meta charset="utf-8">
   <title>Peer Gynt Ocean</title>
 
-  <!-- Load A-Frame FIRST -->
-  <script defer src="https://aframe.io/releases/1.5.8/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/RGBELoader.js"></script>
+  <script src="./combo-ocean.js"></script>
 
-  <!-- Load HDR loader SECOND -->
-  <script defer src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/RGBELoader.js"></script>
+  <script>
+    AFRAME.registerComponent('hdr-sky', {
+      schema: { type: 'asset' },
+      init: function () {
+        const sceneEl = this.el.sceneEl;
+        const loader = new THREE.RGBELoader();
 
-  <!-- Load ocean component THIRD -->
-  <script defer src="./combo-ocean.js"></script>
-
-  <!-- Register hdr-sky component LAST -->
-  <script defer>
-    window.addEventListener("load", function () {
-
-      AFRAME.registerComponent('hdr-sky', {
-        schema: { type: 'asset' },
-
-        init: function () {
-
-          const sceneEl = this.el.sceneEl;
-          const loader = new THREE.RGBELoader();
-
-          loader.load(this.data, (texture) => {
-
-            texture.mapping = THREE.EquirectangularReflectionMapping;
-
-            sceneEl.object3D.background = texture;
-            sceneEl.object3D.environment = texture;
-
-            sceneEl.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            sceneEl.renderer.toneMappingExposure = 1;
-
-          });
-
-        }
-      });
-
+        loader.load(this.data, (texture) => {
+          texture.mapping = THREE.EquirectangularReflectionMapping;
+          sceneEl.object3D.background = texture;
+          sceneEl.object3D.environment = texture;
+          sceneEl.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+          sceneEl.renderer.toneMappingExposure = 1;
+        });
+      }
     });
   </script>
 
   <link rel="stylesheet" href="./style.css">
-
 </head>
 
 <body>
