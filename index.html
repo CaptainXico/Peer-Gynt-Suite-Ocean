@@ -4,14 +4,39 @@
   <meta charset="utf-8">
   <title>Peer Gynt Ocean</title>
 
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/1.5.8/aframe.min.js"></script>
   <script src="./combo-ocean.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/RGBELoader.js"></script>
   <link rel="stylesheet" href="./style.css">
+
+  <script>
+AFRAME.registerComponent('hdr-sky', {
+  schema: { type: 'asset' },
+
+  init: function () {
+    const sceneEl = this.el.sceneEl;
+
+    const loader = new THREE.RGBELoader();
+
+    loader.load(this.data, (texture) => {
+
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+
+      sceneEl.object3D.background = texture;
+      sceneEl.object3D.environment = texture;
+
+      sceneEl.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      sceneEl.renderer.toneMappingExposure = 1;
+
+    });
+  }
+});
+</script>
   
 </head>
 
 <body>
-<a-scene>
+<a-scene hdr-sky="./wasteland_clouds_puresky_2k.hdr">
   <a-sky src="wasteland_clouds_puresky_2k.exr"></a-sky>
 
   <!-- Ocean -->
