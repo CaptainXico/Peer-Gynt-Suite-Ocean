@@ -3,23 +3,27 @@
 <head>
   <meta charset="utf-8">
   <title>Peer Gynt Ocean</title>
-
-  <!-- Load A-Frame -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-
-  <!-- Load your ocean component -->
   <script src="./combo-ocean.js"></script>
-
-  <!-- Your CSS -->
+  <script src="audio-unlock.js"></script>
   <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 
 <a-scene>
-
+   <audio id="ambient-sound" src="morning.mp3" preload="auto"></audio>
+  
   <!-- Sky (use JPG, EXR won't work without extra loaders) -->
   <a-sky src="./BlackHoleWallpapers5.jpg"></a-sky>
+
+  <a-entity
+    sound="src: #ambient-sound;
+    autoplay: true;
+    loop: true;
+    volume: 0.5;
+    positional: false">
+  </a-entity>
 
   <!-- Ocean -->
   <a-ocean-plane
