@@ -6,12 +6,35 @@
 
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="./combo-ocean.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/examples/js/loaders/EXRLoader.js"></script>
   <link rel="stylesheet" href="./style.css">
+
+  <script>
+AFRAME.registerComponent('exr-sky', {
+  schema: { type: 'asset' },
+
+  init: function () {
+    const sceneEl = this.el.sceneEl;
+    const url = this.data;
+
+    const loader = new THREE.EXRLoader();
+
+    loader.load(url, (texture) => {
+
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+
+      sceneEl.object3D.background = texture;
+      sceneEl.object3D.environment = texture;
+
+    });
+  }
+});
+</script>
+  
 </head>
 
 <body>
-<a-scene>
-  <a-sky src="./wasteland_clouds_puresky_2k.exr"></a-sky>
+<a-scene exr-sky="./wasteland_clouds_puresky_2k.exr">
 
   <!-- Ocean -->
   <a-ocean-plane
