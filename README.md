@@ -1,11 +1,11 @@
 # Peer-Gynt-Suite-Ocean
 
-<p>A Ocean moving</p>
+A Ocean moving
 
-<p>A beautyfull sky</p>
+A beautyfull sky
 
-<p>A green cube!?</p>
+A green cube!?
 
-<p>And the best morning song to wake to</p>
+And the best morning song to wake to
 
 link: https://captainxico.github.io/Peer-Gynt-Suite-Ocean/
